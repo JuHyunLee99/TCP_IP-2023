@@ -50,3 +50,23 @@ memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 �
 	serv_addr.sin_port=htons(atoi(argv[1]));	// 16비트 TCP PORT 번호
 	// 두번째 명령어(포트)를 변환해서 할당
  ```
+- IP주소와 PORT번호 할당
+``` c
+// serv_sock에 serv_addr에 담기  정보를 할당
+if(bind(serv_sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr))==-1)
+	error_handling("bind() error");
+```
+- 연결요청 가능상태로 변경
+``` c
+if(listen(serv_sock, 5)==-1)
+	error_handling("listen() error");
+  ```
+- 연결요청에 대한 수락
+``` c
+clnt_addr_size=sizeof(clnt_addr);
+
+//  클라이어트 소켓이 만들어짐
+clnt_sock=accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
+if(clnt_sock==-1)
+	error_handling("accept() error");
+```

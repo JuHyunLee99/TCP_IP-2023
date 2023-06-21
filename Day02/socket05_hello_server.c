@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
 	memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 초기화
 	serv_addr.sin_family=AF_INET;		// 주소체계(Address Family)
-	serv_addr.sin_addr.s_addr=htonl(INADDR_ANY); // 32bit IPv4 인터넷 주주소 
+	serv_addr.sin_addr.s_addr=htonl(INADDR_ANY); // 32bit IPv4 인터넷 주소 
 	serv_addr.sin_port=htons(atoi(argv[1]));	// 16비트 TCP PORT 번호
 	// 두번째 명령어(포트)를 변환해서 할당
 	 

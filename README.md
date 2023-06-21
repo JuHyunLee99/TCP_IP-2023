@@ -28,7 +28,7 @@ TCP/IP 소켓 프로그래밍 학습
 ##Day02
 - 소켓 생성
 ``` c
-serv_sock=socket(PF_INET, SOCK_STREAM, 0);
+serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크립터 저장
 // 프로토콜 체계 (Protocol Family)
 // - PF_INET: IPv4인터넷 프로토콜 체계
 // - PF_INET6: IPv6인터넷 프로토콜 체계

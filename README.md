@@ -26,4 +26,13 @@ TCP/IP 소켓 프로그래밍 학습
 	2. 서버에 연결요청: connect 함수 호출
 
 ##Day02
-- 
+- 소켓 생성
+``` c
+serv_sock=socket(PF_INET, SOCK_STREAM, 0);
+// 프로토콜 체계 (Protocol Family)
+// - PF_INET: IPv4인터넷 프로토콜 체계
+// - PF_INET6: IPv6인터넷 프로토콜 체계
+// 소켓의 타입(Type): 데이터 전송 방식
+// - SOCK_STREAM: 연결지향형 소켓 TCP
+// - SOCK_DGRAM: 비 연결지향형 소켓 UDP
+```

@@ -51,6 +51,15 @@ write(fd, buf, sizeof(buf))
 read(fd, buf, sizeof(buf))
 ```
 ##Day02
+- 네트워크 바이트 순서
+	- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
+   	- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이)
+
+- 문자열 정보를 네트워크 바이트 순서의 정수로 변환
+  	- inet_addr
+  	- inet_aton
+  	- inet_ntoa
+   	
 - 소켓 생성
 ``` c
 serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크립터 저장
@@ -72,8 +81,13 @@ serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크�
 memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 초기화
 	serv_addr.sin_family=AF_INET;		// 주소체계(Address Family)
 	serv_addr.sin_addr.s_addr=htonl(INADDR_ANY); // 32bit IPv4 인터넷 주소 
+ 	// INADDR_ANY: 소켓이 동작하는 컴퓨터의 IP주소 자동으로 할당
 	serv_addr.sin_port=htons(atoi(argv[1]));	// 16비트 TCP PORT 번호
 	// 두번째 명령어(포트)를 변환해서 할당
+ 
+ 	// 네트워크 바이트순서 변환
+  	// hton , htons 
+   	// host_port와 host_addr에 저장된 데이트를 네트워크 바이트 순서로 변환
  ```
 - IP주소와 PORT번호 할당
 ``` c
@@ -95,4 +109,5 @@ clnt_sock=accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
 if(clnt_sock==-1)
 	error_handling("accept() error");
 ```
+
 

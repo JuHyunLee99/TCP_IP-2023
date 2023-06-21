@@ -35,4 +35,18 @@ serv_sock=socket(PF_INET, SOCK_STREAM, 0);
 // 소켓의 타입(Type): 데이터 전송 방식
 // - SOCK_STREAM: 연결지향형 소켓 TCP
 // - SOCK_DGRAM: 비 연결지향형 소켓 UDP
+// 프로토콜의 최종선택 (동일한 프로토콜이 둘 이상 존재하는 경우)
+// - IPPROTO_TCP
+// - IPPROTO_UDP
 ```
+
+- IPv4 기반의 주소표현을 위한 구조체
+	- sockaddr_in
+   	- in_addr
+``` c
+memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 초기화
+	serv_addr.sin_family=AF_INET;		// 주소체계(Address Family)
+	serv_addr.sin_addr.s_addr=htonl(INADDR_ANY); // 32bit IPv4 인터넷 주소 
+	serv_addr.sin_port=htons(atoi(argv[1]));	// 16비트 TCP PORT 번호
+	// 두번째 명령어(포트)를 변환해서 할당
+ ```

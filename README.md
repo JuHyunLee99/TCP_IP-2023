@@ -135,7 +135,8 @@ host=gethostbyname(argv[1]);	// 성공시 hostent 구조체 변수의 주소값,
 if(!host)	// 실패시
 	error_handling("gethost... error");
 ```
-	- 구조체 hostent
+- 구조체 hostent
+ 
  ```c
 printf("official name: %s \n", host->h_name);	// 공식 도메인 이름
 for(i=0; host->h_aliases[i]; i++)

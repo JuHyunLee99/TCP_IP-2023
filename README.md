@@ -110,7 +110,7 @@ if(clnt_sock==-1)
 	error_handling("accept() error");
 ```
 
-##Day05
+## Day05
 - Iterative 에코 서버, 에코 클라이언트
 	- socket01_echo_client.c 문제점
 		- 문자열 단위의 에코에 적절하지 않음.
@@ -127,7 +127,7 @@ if(clnt_sock==-1)
 	- UDP
 	- Half-close 기반의 파일전송 프로그램
 		- shutdown 함수
-##Day04
+## Day04
 - IP주소와 도메인 이름
 ```c
 

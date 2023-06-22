@@ -50,7 +50,7 @@ write(fd, buf, sizeof(buf))
 ```c
 read(fd, buf, sizeof(buf))
 ```
-##Day02
+## Day02
 - 네트워크 바이트 순서
 	- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
    	- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이os)

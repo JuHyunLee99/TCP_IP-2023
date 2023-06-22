@@ -69,6 +69,16 @@ serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크�
 - IPv4 기반의 주소표현을 위한 구조체
 	- sockaddr_in
    	- in_addr
+	
+	- 네트워크 바이트 순서
+		- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
+		- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이os)
+
+	- 문자열 정보를 네트워크 바이트 순서의 정수로 변환
+		- inet_addr
+		- inet_aton
+		- inet_ntoa
+	
 ``` c
 memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 초기화
 	serv_addr.sin_family=AF_INET;		// 주소체계(Address Family)
@@ -81,14 +91,7 @@ memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 �
   	// hton , htons 
    	// host_port와 host_addr에 저장된 데이트를 네트워크 바이트 순서로 변환
  ```
-	- 네트워크 바이트 순서
-		- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
-		- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이os)
-
-	- 문자열 정보를 네트워크 바이트 순서의 정수로 변환
-		- inet_addr
-		- inet_aton
-		- inet_ntoa
+ 		
 - IP주소와 PORT번호 할당
 ``` c
 // serv_sock에 serv_addr에 담기  정보를 할당

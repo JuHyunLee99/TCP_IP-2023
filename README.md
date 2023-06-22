@@ -52,7 +52,7 @@ read(fd, buf, sizeof(buf))
 ```
 ## Day02
    	
-### 소켓 생성
+- 소켓 생성
 ``` c
 serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크립터 저장
 // 프로토콜 체계 (Protocol Family)
@@ -66,7 +66,7 @@ serv_sock=socket(PF_INET, SOCK_STREAM, 0);	// 서버 소켓의 파일 디스크�
 // - IPPROTO_UDP
 ```
 
-### IPv4 기반의 주소표현을 위한 구조체
+- IPv4 기반의 주소표현을 위한 구조체
 	- sockaddr_in
    	- in_addr
 ``` c
@@ -81,26 +81,26 @@ memset(&serv_addr, 0, sizeof(serv_addr));	// 구조체 serv_addr 을  0으로 �
   	// hton , htons 
    	// host_port와 host_addr에 저장된 데이트를 네트워크 바이트 순서로 변환
  ```
-- 네트워크 바이트 순서
-	- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
-   	- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이os)
+	- 네트워크 바이트 순서
+		- 빅 엔디안(Big Endian): 상위 바이트의 값을 작은 번지수에 저장하는 방식
+		- 리틀 엔디안(Little Endian): 상위 바이트의 값을 큰 번지수에 저장하는 방식 (라즈베리파이os)
 
-- 문자열 정보를 네트워크 바이트 순서의 정수로 변환
-  	- inet_addr
-  	- inet_aton
-  	- inet_ntoa
-### IP주소와 PORT번호 할당
+	- 문자열 정보를 네트워크 바이트 순서의 정수로 변환
+		- inet_addr
+		- inet_aton
+		- inet_ntoa
+- IP주소와 PORT번호 할당
 ``` c
 // serv_sock에 serv_addr에 담기  정보를 할당
 if(bind(serv_sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr))==-1)
 	error_handling("bind() error");
 ```
-### 연결요청 가능상태로 변경 = 연결요청 대기상태로의 진입
+- 연결요청 가능상태로 변경 = 연결요청 대기상태로의 진입
 ``` c
 if(listen(serv_sock, 5)==-1)
 	error_handling("listen() error");
   ```
-### 연결요청에 대한 수락
+- 연결요청에 대한 수락
 ``` c
 clnt_addr_size=sizeof(clnt_addr);
 
@@ -128,65 +128,65 @@ if(clnt_sock==-1)
 	- Half-close 기반의 파일전송 프로그램
 		- shutdown 함수
 ## Day04
-### IP주소와 도메인 이름
-- 도메인 이름으로부터 IP의 주소정보를 얻는 함수 
-```c
-host=gethostbyname(argv[1]);	// 성공시 hostent 구조체 변수의 주소값, 실패시 NULL
-if(!host)	// 실패시
-	error_handling("gethost... error");
-```
-- 구조체 hostent
-	 
- ```c
-printf("official name: %s \n", host->h_name);	// 공식 도메인 이름
-for(i=0; host->h_aliases[i]; i++)
-	printf("Aliases %d: %s \n", i+1, host->h_aliases[i]);	// 공식 도메인 이름 외에에 접속할 수 있는 다른 도메인이름
-printf("Address type: %s \n",
-		(host->h_addrtype==AF_INET)?"AF_INET":"AF_INET6");	// IP 주소체계
-for(i=0; host->h_addr_list[i]; i++)		// 도메인 이름에 대한 정수 형태의 IP주소들의 리스트
-	printf("IP addr %d: %s \n", i+1,
-		inet_ntoa(*(struct in_addr*)host->h_addr_list[i]));
-// h_length : IP주소 크기정보
-```
-
-### 프로세스
-- 멀티프로세스 fork 함수
-```c
-pid_t pid=fork();
-// 부모 프로세스 : fork 함수의 반환 값은 자식 프로세스의 ID
-// 자식 프로세스 : fork 함수의 반환 값은 0
-```
-- 좀비프로세스
-	- 좀비프로세스 소멸
-	해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
-	- wait 함수
-	
+- IP주소와 도메인 이름
+	- 도메인 이름으로부터 IP의 주소정보를 얻는 함수 
 	```c
-	pid=fork();	// fork
-	if(pid==0)
-	{
-		exit(7);	// 자식 포로세스 종료
-	}
-	else
-	{
-		printf("Child PID: %d \n", pid);
-		wait(&status);		
-		// wait(): 자식 프로세스가 종료되면서 전달한 값이 매개변수로 전달된 주소의 변수에 저장됨.
-		// 주의점: wait함수 호출된 시점에서 종료된 자식 프로세스가 없다면, 임의의 자식 프로세스가 종료될 때까지 브로킹 상태
-		if(WIFEXITED(status))	// WIFEXITED: 자식 프로세스가 정상 종료한 경우 참(True) 반환
-			printf("Child send one: %d \n", WEXITSTATUS(status));	// WEXITSTATUS: 자식 프로세스의 전달 값을 반환
+	host=gethostbyname(argv[1]);	// 성공시 hostent 구조체 변수의 주소값, 실패시 NULL
+	if(!host)	// 실패시
+		error_handling("gethost... error");
+	```
+	- 구조체 hostent
+	 
+	```c
+	printf("official name: %s \n", host->h_name);	// 공식 도메인 이름
+	for(i=0; host->h_aliases[i]; i++)
+		printf("Aliases %d: %s \n", i+1, host->h_aliases[i]);	// 공식 도메인 이름 외에에 접속할 수 있는 다른 도메인이름
+	printf("Address type: %s \n",
+			(host->h_addrtype==AF_INET)?"AF_INET":"AF_INET6");	// IP 주소체계
+	for(i=0; host->h_addr_list[i]; i++)		// 도메인 이름에 대한 정수 형태의 IP주소들의 리스트
+		printf("IP addr %d: %s \n", i+1,
+			inet_ntoa(*(struct in_addr*)host->h_addr_list[i]));
+	// h_length : IP주소 크기정보
+	```
+
+- 프로세스
+	- 멀티프로세스 fork 함수
+	```c
+	pid_t pid=fork();
+	// 부모 프로세스 : fork 함수의 반환 값은 자식 프로세스의 ID
+	// 자식 프로세스 : fork 함수의 반환 값은 0
+	```
+	- 좀비프로세스
+		- 좀비프로세스 소멸
+		해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
+		- wait 함수
+	
+		```c
+		pid=fork();	// fork
+		if(pid==0)
+		{
+			exit(7);	// 자식 포로세스 종료
+		}
+		else
+		{
+			printf("Child PID: %d \n", pid);
+			wait(&status);		
+			// wait(): 자식 프로세스가 종료되면서 전달한 값이 매개변수로 전달된 주소의 변수에 저장됨.
+			// 주의점: wait함수 호출된 시점에서 종료된 자식 프로세스가 없다면, 임의의 자식 프로세스가 종료될 때까지 브로킹 상태
+			if(WIFEXITED(status))	// WIFEXITED: 자식 프로세스가 정상 종료한 경우 참(True) 반환
+				printf("Child send one: %d \n", WEXITSTATUS(status));	// WEXITSTATUS: 자식 프로세스의 전달 값을 반환
+			}
+
+		```
+	
+		- waitpid 함수
+		```C      
+		while(!waitpid(-1, &status, WNOHANG))	// waitpid: wait함수의 브로킹 문제 해결
+		{
+			sleep(3);
+			puts("sleep 3sec.");
 		}
 
-	```
-	
-	- waitpid 함수
-	```C      
-	while(!waitpid(-1, &status, WNOHANG))	// waitpid: wait함수의 브로킹 문제 해결
-	{
-		sleep(3);
-		puts("sleep 3sec.");
-	}
-
-	if(WIFEXITED(status))
-		printf("Child send one: %d \n", WEXITSTATUS(status));
-	``` 
+		if(WIFEXITED(status))
+			printf("Child send one: %d \n", WEXITSTATUS(status));
+		``` 

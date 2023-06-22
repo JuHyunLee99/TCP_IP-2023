@@ -157,10 +157,11 @@ pid_t pid=fork();
 // 자식 프로세스 : fork 함수의 반환 값은 0
 ```
 - 좀비프로세스
-  - 좀비프로세스 소멸
-    해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
+	- 좀비프로세스 소멸
+   	  해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
     - wait 함수
       ```c
+      
       pid=fork();	// fork
 		if(pid==0)
 		{
@@ -175,9 +176,10 @@ pid_t pid=fork();
 			if(WIFEXITED(status))	// WIFEXITED: 자식 프로세스가 정상 종료한 경우 참(True) 반환
 				printf("Child send one: %d \n", WEXITSTATUS(status));	// WEXITSTATUS: 자식 프로세스의 전달 값을 반환
     		}
+      
       ```
     - waitpid 함수
-      ```c
+      ```C      
 	while(!waitpid(-1, &status, WNOHANG))	// waitpid: wait함수의 브로킹 문제 해결
 	{
 		sleep(3);
@@ -186,5 +188,6 @@ pid_t pid=fork();
 	
 	if(WIFEXITED(status))
 		printf("Child send one: %d \n", WEXITSTATUS(status));
+
       ```
       

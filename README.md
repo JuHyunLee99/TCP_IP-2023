@@ -130,7 +130,10 @@ if(clnt_sock==-1)
 ## Day04
 - IP주소와 도메인 이름
 ```c
-
+// 도메인 이름으로부터 IP의 주소정보를 얻는 함수 
+host=gethostbyname(argv[1]);	// 성공시 hostent 구조체 변수의 주소값, 실패시 NULL
+if(!host)	// 실패시
+	error_handling("gethost... error");
 ```
 	 
 			

@@ -150,7 +150,7 @@ for(i=0; host->h_addr_list[i]; i++)		// 도메인 이름에 대한 정수 형태
 ```
 
 ### 프로세스
-  - 멀티프로세스 fork 함수
+- 멀티프로세스 fork 함수
 ```c
 pid_t pid=fork();
 // 부모 프로세스 : fork 함수의 반환 값은 자식 프로세스의 ID
@@ -158,36 +158,35 @@ pid_t pid=fork();
 ```
 - 좀비프로세스
 	- 좀비프로세스 소멸
-   	  해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
-    - wait 함수
-      ```c
-      
-      pid=fork();	// fork
-		if(pid==0)
-		{
-			exit(7);	// 자식 포로세스 종료
+	해당 자식 프로세스를 생성한 부모 프로세스에게 exit함수의 인자 값이나 return문에 반환 값이 전달되어야한다.
+	- wait 함수
+	
+	```c
+	pid=fork();	// fork
+	if(pid==0)
+	{
+		exit(7);	// 자식 포로세스 종료
+	}
+	else
+	{
+		printf("Child PID: %d \n", pid);
+		wait(&status);		
+		// wait(): 자식 프로세스가 종료되면서 전달한 값이 매개변수로 전달된 주소의 변수에 저장됨.
+		// 주의점: wait함수 호출된 시점에서 종료된 자식 프로세스가 없다면, 임의의 자식 프로세스가 종료될 때까지 브로킹 상태
+		if(WIFEXITED(status))	// WIFEXITED: 자식 프로세스가 정상 종료한 경우 참(True) 반환
+			printf("Child send one: %d \n", WEXITSTATUS(status));	// WEXITSTATUS: 자식 프로세스의 전달 값을 반환
 		}
-		else
-		{
-			printf("Child PID: %d \n", pid);
-			wait(&status);		
-			// wait(): 자식 프로세스가 종료되면서 전달한 값이 매개변수로 전달된 주소의 변수에 저장됨.
-			// 주의점: wait함수 호출된 시점에서 종료된 자식 프로세스가 없다면, 임의의 자식 프로세스가 종료될 때까지 브로킹 상태
-			if(WIFEXITED(status))	// WIFEXITED: 자식 프로세스가 정상 종료한 경우 참(True) 반환
-				printf("Child send one: %d \n", WEXITSTATUS(status));	// WEXITSTATUS: 자식 프로세스의 전달 값을 반환
-    		}
-      
-      ```
-    - waitpid 함수
-      ```C      
+
+	```
+	
+	- waitpid 함수
+	```C      
 	while(!waitpid(-1, &status, WNOHANG))	// waitpid: wait함수의 브로킹 문제 해결
 	{
 		sleep(3);
 		puts("sleep 3sec.");
 	}
-	
+
 	if(WIFEXITED(status))
 		printf("Child send one: %d \n", WEXITSTATUS(status));
-
-      ```
-      
+	``` 

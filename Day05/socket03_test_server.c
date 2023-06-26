@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
 	clnt_adr_sz=sizeof(clnt_adr);
 	while(1)
 	{
+		int fd=open("game.jpg", O_RDONLY);
+
 		// 요청 수락, 클라이언트 소켓 생성
 		clnt_sock=accept(serv_sock, (struct sockaddr*)&clnt_adr, &clnt_adr_sz);
 		if(clnt_sock==-1)
@@ -62,17 +64,18 @@ int main(int argc, char *argv[])
 			printf("%s", buf);
 			if(strstr(buf,"game.jpg")!= NULL)	// 사진 요청이면
 			{
-				int fd=open("game.jpg", O_RDONLY);
 				if(fd==-1)
 					error_handling("파일open() error!");
 				else
 				{
 					char img_buf[IMG_BUF_SIZE];
-					if(read(fd, img_buf, IMG_BUF_SIZE)==-1)
+					if(!(read(fd, img_buf, IMG_BUF_SIZE)>0))
 						error_handling("파일 read() error!");
 					else
 					{
-						write(clnt_sock, img_buf,	IMG_BUF_SIZE);
+						
+						write(clnt_sock, img_buf,	sizeof(img_buf));
+						
 					}
 				}
 			}
@@ -83,6 +86,7 @@ int main(int argc, char *argv[])
 		}	
 		printf("연결 끊기\n\n");
 		close(clnt_sock);
+		close(fd);
 	}
 	close(serv_sock);
 	return 0;

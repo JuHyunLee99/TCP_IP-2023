@@ -48,8 +48,6 @@ int main(int argc, char *argv[])
 	clnt_adr_sz=sizeof(clnt_adr);
 	while(1)
 	{
-		int fd=open("game.jpg", O_RDONLY);
-
 		// 요청 수락, 클라이언트 소켓 생성
 		clnt_sock=accept(serv_sock, (struct sockaddr*)&clnt_adr, &clnt_adr_sz);
 		if(clnt_sock==-1)
@@ -64,19 +62,28 @@ int main(int argc, char *argv[])
 			printf("%s", buf);
 			if(strstr(buf,"game.jpg")!= NULL)	// 사진 요청이면
 			{
-				if(fd==-1)
+				int fdimg=open("game.jpg", O_RDONLY);
+				
+				if(fdimg==-1)
 					error_handling("파일open() error!");
 				else
 				{
 					char img_buf[IMG_BUF_SIZE];
-					if(!(read(fd, img_buf, IMG_BUF_SIZE)>0))
+					int img_size;	// 실제 이미지 바이트 수
+					if((img_size=read(fdimg, img_buf, IMG_BUF_SIZE)==-1))
 						error_handling("파일 read() error!");
 					else
 					{
-						
-						write(clnt_sock, img_buf,	sizeof(img_buf));
-						
+						char header[]= "HTTP/1.1 200 OK=R=N"
+									"Server: Linux Web Server\r\n"
+									"Content-Type: image/jpeg\r\n"
+									"Content-Length: %ld\r\n\r\n";
+						// 헤더 전송
+						if(write(clnt_sock, header, strlen(header)) < 0) printf("header write error!!");
+						// 이미지 전송
+						if(write(clnt_sock, img_buf, sizeof(img_buf)) < 0) printf("image write error!!");												
 					}
+					close(fdimg);
 				}
 			}
 				
@@ -86,7 +93,6 @@ int main(int argc, char *argv[])
 		}	
 		printf("연결 끊기\n\n");
 		close(clnt_sock);
-		close(fd);
 	}
 	close(serv_sock);
 	return 0;
